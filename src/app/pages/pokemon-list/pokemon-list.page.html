@@ -1,3 +1,40 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Pokémon List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [debounce]="1000" (ionInput)="handleBusqueda($event)" id="buscarPokemon"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let pokemon of filteredPokemons" >
+      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+    </ion-item>
+
+  </ion-list>
+
+    <div *ngIf="pokemonDetails"> 
+      <img [src]="pokemonDetails?.sprites?.front_female">
+      <p>{{pokemonDetails.id}}</p>
+      <p>{{pokemonDetails.height}}</p>
+      <p>{{pokemonDetails.weight}}</p>
+      <p>{{pokemonDetails.id}}</p>
+
+      <ul>
+        <li *ngFor="let ability of pokemonDetails.abilities">{{ability.ability.name}}</li>
+      </ul>
+
+
+    </div>
+
+
+     
+  
+
+  <ion-spinner *ngIf="loading" class="loading-spinner"></ion-spinner>
+</ion-content> -->
+
+
 <ion-header>
   <ion-toolbar>
     <ion-title>Pokémon List</ion-title>
@@ -5,14 +42,43 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let pokemon of pokemons">
-      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
-      <a href="{{ pokemon.url}}"><ion-label>{{ pokemon.url}}</ion-label></a>
-      
-    </ion-item>
+  <ion-searchbar [debounce]="1000" (ionInput)="handleBusqueda($event)" id="buscarPokemon"></ion-searchbar>
   
+  <!-- Lista de Pokémons filtrados -->
+  <ion-list>
+    <ion-item *ngFor="let pokemon of filteredPokemons">
+      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+    </ion-item>
   </ion-list>
 
+  <!-- Spinner de carga -->
   <ion-spinner *ngIf="loading" class="loading-spinner"></ion-spinner>
+
+  <!-- Detalles del Pokémon -->
+  <ion-card *ngIf="pokemonDetails">
+    <ion-card-header>
+      <ion-card-title>{{ pokemonDetails.name | titlecase }}</ion-card-title>
+      <ion-card-subtitle><strong>ID:</strong> {{ pokemonDetails.id }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Imagen del Pokémon -->
+      <ion-img [src]="pokemonDetails?.sprites?.front_default" alt="{{ pokemonDetails.name }}" weight="50"></ion-img>
+      
+      <!-- Detalles adicionales -->
+      <div class="pokemon-stats">
+        <p><strong>Height:</strong> {{ pokemonDetails.height }} </p>
+        <p><strong>Weight:</strong> {{ pokemonDetails.weight }} </p>
+      </div>
+
+      <!-- Habilidades -->
+      <ion-list>
+        <p><strong>Habilidades</strong></p>
+        <ion-item *ngFor="let ability of pokemonDetails.abilities">
+          <ion-label>- {{ ability.ability.name | titlecase }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

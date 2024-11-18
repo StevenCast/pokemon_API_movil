@@ -9,7 +9,8 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 export class PokemonListPage implements OnInit {
   pokemons: any[] = [];
   loading = false;
-
+  filteredPokemons: any[] =[];
+  pokemonDetails: any = null;
   constructor(private pokemonService: PokemonService) {}
 
   ngOnInit() {
@@ -22,6 +23,7 @@ export class PokemonListPage implements OnInit {
     this.pokemonService.getPokemons(50).subscribe({
       next: (response) => {
         this.pokemons = response.results;
+        this.filteredPokemons = [...this.pokemons];
         this.loading = false;
       },
       error: (error) => {
@@ -30,4 +32,26 @@ export class PokemonListPage implements OnInit {
       },
     });
   }
+
+  handleBusqueda(event: any){
+    const query = event.target.value.toLowerCase();
+    this.filteredPokemons = this.pokemons.filter((pokemon)=> pokemon.name.toLowerCase().includes(query));
+    console.log(this.filteredPokemons);
+  
+    this.loading = true;
+    const name = (document.getElementById("buscarPokemon") as HTMLInputElement).value.trim().toLocaleLowerCase();
+    
+    this.pokemonService.getPokemonDetails(name).subscribe({
+      next: (details) =>{
+        console.log(details);
+        this.pokemonDetails = details
+        this.loading = false;
+      },
+      error: (error)=>{
+        console.log(error);
+        this.loading = false;
+      }
+    })
+  }
+
 }
